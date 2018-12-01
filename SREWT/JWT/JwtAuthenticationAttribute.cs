@@ -1,4 +1,5 @@
 ﻿using Microsoft.IdentityModel.Tokens;
+using SREWT.JWT.Provider.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -72,7 +73,7 @@ namespace SREWT.JWT
                     actionContext.Response = actionContext.Request.CreateErrorResponse(HttpStatusCode.Unauthorized, "Authorization token not valid.");
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 actionContext.Response = actionContext.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Unexpected error occured.");
             }

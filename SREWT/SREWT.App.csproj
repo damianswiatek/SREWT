@@ -190,11 +190,24 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\MembershipController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
+    <Compile Include="JWT\Attribute\TokenAuthenticate.cs" />
+    <Compile Include="JWT\AuthenticationFailureResult.cs" />
+    <Compile Include="JWT\AuthService.cs" />
+    <Compile Include="JWT\IAuthService.cs" />
+    <Compile Include="JWT\IMembershipProvider.cs" />
+    <Compile Include="JWT\IRSAKeyProvider.cs" />
     <Compile Include="JWT\JwtAuthenticationAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="JWT\MembershipProvider.cs" />
+    <Compile Include="JWT\Provider\Interfaces\IJwtTokenProvider.cs" />
+    <Compile Include="JWT\Provider\Interfaces\IMembershipProvider.cs" />
+    <Compile Include="JWT\Provider\JwtTokenProvider.cs" />
+    <Compile Include="JWT\Provider\MembershipProvider.cs" />
+    <Compile Include="JWT\RSAKeyProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -248,10 +261,12 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
+    <None Include="Web.AppSettings.config" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Models\" />
+    <Folder Include="Views\Membership\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
@@ -265,6 +280,12 @@
   <ItemGroup>
     <None Include="packages.config" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj">
+      <Project>{A5AC25E8-4B14-4968-8097-DB70EE40F26A}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
