@@ -15,10 +15,8 @@ using System.Web.Http.Controllers;
 using System.Web.Http.Filters;
 using System.Web.Http.Results;
 using System.Web.Mvc;
-//using ZavenTraining.Common.Configuration;
-//using ZavenTraining.Domain.Services.Membership.Interfaces;
 
-namespace SREWT.JWT
+namespace SREWT.Attributes
 {
     public class JwtAuthenticationAttribute : System.Web.Http.AuthorizeAttribute
     {

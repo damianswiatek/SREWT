@@ -1,11 +1,10 @@
 ﻿using Common.Configuration;
+using DataModel.Entities;
 using Microsoft.IdentityModel.Tokens;
 using SREWT.JWT.Provider.Interfaces;
 using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.IO;
-using System.Linq;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
@@ -14,7 +13,7 @@ using System.Web;
 
 namespace SREWT.JWT.Provider
 {
-    public class JwtTokenProvider : SREWT.JWT.Provider.Interfaces.IJwtTokenProvider
+    public class JwtTokenProvider : IJwtTokenProvider
     {
         private static SigningCredentials _signingCredentials;
         private static SecurityKey _securityKey;
@@ -41,7 +40,7 @@ namespace SREWT.JWT.Provider
             }
 
             _securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(signingKey));
-            _signingCredentials = new SigningCredentials(_securityKey, SecurityAlgorithms.HmacSha256);
+            _signingCredentials = new Microsoft.IdentityModel.Tokens.SigningCredentials(_securityKey, SecurityAlgorithms.HmacSha256);
         }
 
         public Task<string> GenerateToken(User user)
@@ -54,14 +53,14 @@ namespace SREWT.JWT.Provider
                 // Create the JWT
                 var claimsIdentity = new ClaimsIdentity(new[]
                 {
-                    new Claim(new System.IO.BinaryReader(stream), user.UserName),
+                    new System.Security.Claims.Claim(new System.IO.BinaryReader(stream),new ClaimsIdentity(user.Firstname + " " + user.Lastname)),
                     // And any other bit of (session) data you want....
                 });
 
                 DateTime now = DateTime.UtcNow;
                 JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
 
-                SecurityTokenDescriptor tokenDescriptor = new SecurityTokenDescriptor
+                Microsoft.IdentityModel.Tokens.SecurityTokenDescriptor tokenDescriptor = new Microsoft.IdentityModel.Tokens.SecurityTokenDescriptor
                 {
                     Subject = claimsIdentity,
                     Issuer = SecurityConfiguration.TokenIssuer,
@@ -76,7 +75,7 @@ namespace SREWT.JWT.Provider
                     tokenDescriptor.Expires = now.AddMinutes(tokenLifetime);
                 }
 
-                SecurityToken token = tokenHandler.CreateToken(tokenDescriptor);
+                Microsoft.IdentityModel.Tokens.SecurityToken token = tokenHandler.CreateToken(tokenDescriptor);
 
                 return tokenHandler.WriteToken(token);
             });
@@ -110,7 +109,6 @@ namespace SREWT.JWT.Provider
                     //tokenHandler.InboundClaimTypeMap["name"] = ClaimTypes.Name;
 
                     SecurityToken securityToken;
-
                     result = tokenHandler.ValidateToken(token, validationParams, out securityToken);
                 }
                 catch (Exception)

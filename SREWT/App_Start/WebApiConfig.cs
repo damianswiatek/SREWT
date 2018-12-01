@@ -10,6 +10,7 @@ namespace SREWT
         public static void Register(HttpConfiguration config)
         {
             // Web API configuration and services
+            config.DependencyResolver = new UnityApiActivator(UnityConfig.GetConfiguredContainer());
 
             // Web API routes
             config.MapHttpAttributeRoutes();

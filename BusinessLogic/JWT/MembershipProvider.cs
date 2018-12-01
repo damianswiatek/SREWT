@@ -10,9 +10,11 @@ namespace SREWT.JWT
     {
         public List<Claim> GetUserClaims(string username)
         {
-            List<Claim> claims = new List<Claim>();
-            claims.Add(new Claim(ClaimTypes.Role, "Admin"));
-            claims.Add(new Claim(ClaimTypes.Email, "admin93@gmail.com"));
+            List<Claim> claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Role, "Admin"),
+                new Claim(ClaimTypes.Email, "admin93@gmail.com")
+            };
             return claims;
         }
 

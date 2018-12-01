@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataModel.Models.Base
+namespace DataModel.Entities.Base
 {
     public class EntityBase
     {
