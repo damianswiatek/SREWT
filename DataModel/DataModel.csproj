@@ -136,6 +136,10 @@
     <Compile Include="Container\DatabaseContainer.cs" />
     <Compile Include="Entities\Base\EntityBase.cs" />
     <Compile Include="Entities\User.cs" />
+    <Compile Include="Migrations\201812021014356_AddUserTable.cs" />
+    <Compile Include="Migrations\201812021014356_AddUserTable.Designer.cs">
+      <DependentUpon>201812021014356_AddUserTable.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\GenericRepository.cs" />
@@ -156,6 +160,11 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201812021014356_AddUserTable.resx">
+      <DependentUpon>201812021014356_AddUserTable.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

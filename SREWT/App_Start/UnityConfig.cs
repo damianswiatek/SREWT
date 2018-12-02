@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Web.Http.Dispatcher;
 using BusinessLogic;
+using DataModel.Container;
 using DataModel.Entities;
 using DataModel.Repository;
 using DataModel.Repository.Interfaces;
 using Microsoft.Practices.Unity;
+using SREWT.JWT;
 using SREWT.JWT.Provider;
 using SREWT.JWT.Provider.Interfaces;
 using Unity;
@@ -44,21 +46,25 @@ namespace SREWT
             // NOTE: To load from web.config uncomment the line below. Make sure to add a Microsoft.Practices.Unity.Configuration to the using statements.
             // container.LoadConfiguration();
 
+            container.RegisterInstance<IHttpControllerActivator>(new HttpControllerActivator(container));
             // TODO: Register your types here
             // container.RegisterType<IProductRepository, ProductRepository>();
-
-            container.RegisterInstance<IHttpControllerActivator>(new HttpControllerActivator(container));
+            container.RegisterType<System.Data.Entity.DbContext, DatabaseContainer>(new PerRequestLifetimeManager());
 
             // Unit of Work
             container.RegisterType<IUnitOfWork, UnitOfWork>(new PerRequestLifetimeManager());
 
             // Password Hasher
-            container.RegisterType<IMembershipProvider, MembershipProvider>(new PerRequestLifetimeManager());
+            container.RegisterType<IAuthService, AuthService>(new HierarchicalLifetimeManager());
+            container.RegisterType<JWT.Provider.Interfaces.IMembershipProvider, JWT.Provider.MembershipProvider>(new PerRequestLifetimeManager());
+            container.RegisterType<JWT.IMembershipProvider, JWT.MembershipProvider>(new PerRequestLifetimeManager());
+            container.RegisterType<IRSAKeyProvider, RSAKeyProvider>(new PerRequestLifetimeManager());
 
             // JWT Token Provider
             container.RegisterType<IJwtTokenProvider, JwtTokenProvider>(new HierarchicalLifetimeManager());
 
             // Repositories
+            container.RegisterType<IBaseRepository<User>, BaseRepository<User>>(new PerRequestLifetimeManager());
             container.RegisterType<IRepository<User>, GenericRepository<User>>(new PerRequestLifetimeManager());
             
             // Services

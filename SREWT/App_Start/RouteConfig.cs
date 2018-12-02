@@ -13,6 +13,20 @@ namespace SREWT
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
+            //Go to the web.config and change default html page if you want to
+            /*<defaultDocument>
+                <files>
+                    <clear/>
+                    <add value = "app/index.html" /> 
+                </files>
+              </defaultDocument>
+            */
+
+            routes.IgnoreRoute("app/index.html");
+            routes.IgnoreRoute("");
+            routes.IgnoreRoute("js/controllers");
+
+
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
