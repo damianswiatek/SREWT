@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SREWT.JWT.Provider
 {
-    public class MembershipProvider : SREWT.JWT.Provider.Interfaces.IMembershipProvider
+    public class MembershipHashProvider : SREWT.JWT.Provider.Interfaces.IMembershipHashProvider
     {/// <summary>
      /// Size of salt
      /// </summary>

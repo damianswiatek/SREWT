@@ -9,7 +9,6 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
-using IMembershipProvider = SREWT.JWT.Provider.Interfaces.IMembershipProvider;
 
 namespace BusinessLogic
 {
@@ -17,12 +16,12 @@ namespace BusinessLogic
     {
         #region Fields
         private readonly IRepository<User> _usersRepository;
-        private readonly IMembershipProvider _membershipProvider;
+        private readonly IMembershipHashProvider _membershipProvider;
         private readonly IJwtTokenProvider _jwtTokenProvider;
         #endregion
 
         #region Constructors
-        public UsersService(IUnitOfWork unitOfWork, IRepository<User> usersRepository, IMembershipProvider membershipProvider, IJwtTokenProvider jwtTokenProvider)
+        public UsersService(IUnitOfWork unitOfWork, IRepository<User> usersRepository, IMembershipHashProvider membershipProvider, IJwtTokenProvider jwtTokenProvider)
             : base(unitOfWork)
         {
             this._usersRepository = usersRepository;
@@ -41,6 +40,9 @@ namespace BusinessLogic
                 User newUser = new User
                 {
                     Id = Guid.NewGuid(),
+                    PhoneNumber = "983414531",
+                    ReversedPhoneNumber = "983414532",
+                    RegistrationDate = DateTime.UtcNow,
                     X_CreatedDate = DateTime.UtcNow,
                     Username = userName,
                     PasswordHash = await this._membershipProvider.HashPassword(password)

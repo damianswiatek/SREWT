@@ -34,10 +34,10 @@ namespace SREWT.Controllers
         
         [AllowAnonymous]
         [HttpGet]
-        [Route("api/membership/token")]
-        public async Task<string> Authenticate([FromBody] Login login)
+        [Route("api/membership/{login}/token/{password}")]
+        public async Task<string> Authenticate(string login, string password)
         {
-            string Token = await _authService.GenerateJwtTokenAsync(login.UserName, login.Password);
+            string Token = await _authService.GenerateJwtTokenAsync(login, password);
             return Token;
         }
     }

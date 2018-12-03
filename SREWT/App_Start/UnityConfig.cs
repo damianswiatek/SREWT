@@ -46,7 +46,7 @@ namespace SREWT
             // NOTE: To load from web.config uncomment the line below. Make sure to add a Microsoft.Practices.Unity.Configuration to the using statements.
             // container.LoadConfiguration();
 
-            container.RegisterInstance<IHttpControllerActivator>(new HttpControllerActivator(container));
+
             // TODO: Register your types here
             // container.RegisterType<IProductRepository, ProductRepository>();
             container.RegisterType<System.Data.Entity.DbContext, DatabaseContainer>(new PerRequestLifetimeManager());
@@ -56,8 +56,8 @@ namespace SREWT
 
             // Password Hasher
             container.RegisterType<IAuthService, AuthService>(new HierarchicalLifetimeManager());
-            container.RegisterType<JWT.Provider.Interfaces.IMembershipProvider, JWT.Provider.MembershipProvider>(new PerRequestLifetimeManager());
-            container.RegisterType<JWT.IMembershipProvider, JWT.MembershipProvider>(new PerRequestLifetimeManager());
+            container.RegisterType<IMembershipHashProvider, MembershipHashProvider>(new PerRequestLifetimeManager());
+            container.RegisterType<IMembershipProvider, MembershipProvider>(new PerRequestLifetimeManager());
             container.RegisterType<IRSAKeyProvider, RSAKeyProvider>(new PerRequestLifetimeManager());
 
             // JWT Token Provider
@@ -66,7 +66,8 @@ namespace SREWT
             // Repositories
             container.RegisterType<IBaseRepository<User>, BaseRepository<User>>(new PerRequestLifetimeManager());
             container.RegisterType<IRepository<User>, GenericRepository<User>>(new PerRequestLifetimeManager());
-            
+            container.RegisterType<IRepository<User>, GenericRepository<User>>(new PerRequestLifetimeManager());
+
             // Services
             container.RegisterType<IUsersService, UsersService>(new PerRequestLifetimeManager());
         }

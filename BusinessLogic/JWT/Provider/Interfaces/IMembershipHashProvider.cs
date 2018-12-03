@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SREWT.JWT.Provider.Interfaces
 {
-    public interface IMembershipProvider
+    public interface IMembershipHashProvider
     {
         Task<string> HashPassword(string password, int iterations);
         Task<string> HashPassword(string password);
