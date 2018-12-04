@@ -20,6 +20,7 @@ namespace Common.Results
             {
                 return this.Messages.Where(m => m.Type == ServiceMessageType.Error).Count() == 0;
             }
+            set { }
         }
         public List<ServiceMessage> Errors
         {
@@ -36,13 +37,19 @@ namespace Common.Results
             this.Result = result;
             this.Messages = new List<ServiceMessage>();
         }
+
+        public ServiceResult(T result, Boolean IsSuccess)
+        {
+            this.Result = result;
+            this.IsSuccess = IsSuccess && this.Messages.Where(m => m.Type == ServiceMessageType.Error).Count() == 0;
+        }
         #endregion
 
         #region Methods
-
-        public void AddError(string sourceServiceName, string sourceMethod, string messageKey, string messageText, Exception exception = null)
+        public ServiceResult<T> AddError(string sourceServiceName, string sourceMethod, ServiceMessageType type, string messageText, Exception exception = null)
         {
-            this.Messages.Add(new ServiceMessage(sourceServiceName, sourceMethod, ServiceMessageType.Error, messageKey, messageText, exception));
+            this.Messages.Add(new ServiceMessage(sourceServiceName, sourceMethod, type, messageText, exception));
+            return this;
         }
         #endregion
     }

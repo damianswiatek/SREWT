@@ -143,9 +143,11 @@
     <Compile Include="IUsersService.cs" />
     <Compile Include="JWT\AuthService.cs" />
     <Compile Include="JWT\IAuthService.cs" />
+    <Compile Include="JWT\IdentityProvider.cs" />
     <Compile Include="JWT\IMembershipProvider.cs" />
     <Compile Include="JWT\IRSAKeyProvider.cs" />
     <Compile Include="JWT\MembershipProvider.cs" />
+    <Compile Include="JWT\Provider\Interfaces\IIdentityProvider.cs" />
     <Compile Include="JWT\Provider\Interfaces\IJwtTokenProvider.cs" />
     <Compile Include="JWT\Provider\Interfaces\IMembershipHashProvider.cs" />
     <Compile Include="JWT\Provider\JwtTokenProvider.cs" />

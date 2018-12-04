@@ -9,7 +9,7 @@ namespace SREWT.JWT
 {
     public interface IMembershipProvider
     {
-        List<Claim> GetUserClaims(string username);
-        bool VerifyUserPassword(string username, string password);
+        Task<List<Claim>> GetUserClaims(string username);
+        Task<bool> VerifyUserPassword(string username, string password);
     }
 }

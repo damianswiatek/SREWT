@@ -26,9 +26,13 @@ namespace DataModel.Entities
         /// <summary>
         /// A proxy for getting and setting Roles property as List of strings directly from and to JSON fromat.
         /// </summary>
-        public List<String> RolesList { get { return JsonConvert.DeserializeObject<List<String>>(this.Roles); } set { this.Roles = JsonConvert.SerializeObject(value); } }
+        public List<String> RolesList
+        {
+            get { return this.Roles != null ? JsonConvert.DeserializeObject<List<String>>(this.Roles) : null; }
+            set { this.Roles = JsonConvert.SerializeObject(value); }
+        }
         #endregion
-        
+
 
         public User()
         {

@@ -9,8 +9,6 @@ namespace Common.Results
     public class ServiceMessage
     {        
         public Exception Exception { get; }
-      
-        public string MessageKey { get; }
         
         public string MessageText { get; }      
        
@@ -20,12 +18,11 @@ namespace Common.Results
       
         public ServiceMessageType Type { get; }
 
-        public ServiceMessage(string sourceServiceName, string sourceMethod, ServiceMessageType type, string messageKey, string messageText, Exception exception = null)
+        public ServiceMessage(string sourceServiceName, string sourceMethod, ServiceMessageType type, string messageText, Exception exception = null)
         {
             this.SourceServiceName = sourceServiceName;
             this.SourceMethod = sourceMethod;
             this.Type = type;
-            this.MessageKey = messageKey;
             this.MessageText = messageText;
             this.Exception = exception;
         }

@@ -3,6 +3,7 @@ using DataModel.Entities;
 using DataModel.Repository.Interfaces;
 using SREWT.JWT;
 using SREWT.JWT.Provider.Interfaces;
+using SREWT.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -56,7 +57,7 @@ namespace BusinessLogic
             }
             catch (Exception ex)
             {
-                result.AddError(this.Name, "CreateUser", null, null, ex);
+                result.AddError(this.Name, "CreateUser", ServiceMessageType.Error, null, ex);
             }
 
             return result;
@@ -82,14 +83,32 @@ namespace BusinessLogic
                 else
                 {
                     result.Result = null;
-                    result.AddError("UsersService", "GetToken", "Unathorize", "User with UserName: " + userName + " doesn't exists.");
+                    result.AddError("UsersService", "GetToken", ServiceMessageType.Info, "Unathorize - User with UserName: " + userName + " doesn't exists.");
                 }
             }
             catch (Exception ex)
             {
-                result.AddError(this.Name, "ValidateUser", null, null, ex);
+                result.AddError(this.Name, "ValidateUser", ServiceMessageType.Error, null, ex);
             }
 
+            return result;
+        }
+
+        public async Task<ServiceResult<LoggedUser>> GetLoggedUser(Guid loggedUserId)
+        {
+            ServiceResult<LoggedUser> result = null;
+            LoggedUser LoggedUser = null;
+
+            User user = await _usersRepository.Select(x => x.Id == loggedUserId);
+            if (user != null)
+            {
+                LoggedUser = new LoggedUser(user);
+                result = new ServiceResult<LoggedUser>(LoggedUser, true);
+            }
+            else
+            {
+                result = new ServiceResult<LoggedUser>(null, false);
+            }
             return result;
         }
         #endregion

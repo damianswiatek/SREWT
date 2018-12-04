@@ -62,6 +62,7 @@ namespace SREWT
 
             // JWT Token Provider
             container.RegisterType<IJwtTokenProvider, JwtTokenProvider>(new HierarchicalLifetimeManager());
+            container.RegisterType<IIdentityProvider, IdentityProvider>(new PerRequestLifetimeManager());
 
             // Repositories
             container.RegisterType<IBaseRepository<User>, BaseRepository<User>>(new PerRequestLifetimeManager());

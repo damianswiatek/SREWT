@@ -242,6 +242,7 @@
     <Compile Include="Attributes\AuthenticationFailureResult.cs" />
     <Compile Include="Attributes\JwtAuthenticationAttribute.cs" />
     <Compile Include="Attributes\TokenAuthenticate.cs" />
+    <Compile Include="Controllers\Base\BaseController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MembershipController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />

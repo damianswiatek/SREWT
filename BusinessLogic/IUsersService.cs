@@ -1,4 +1,5 @@
 ﻿using Common.Results;
+using SREWT.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,5 +12,6 @@ namespace BusinessLogic
     {
         Task<ServiceResult<bool>> CreateUser(string userName, string password);
         Task<ServiceResult<string>> GetToken(string userName, string password);
+        Task<ServiceResult<LoggedUser>> GetLoggedUser(Guid loggedUserId);
     }
 }

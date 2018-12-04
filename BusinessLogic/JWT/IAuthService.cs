@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Common.Results;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,7 +9,7 @@ namespace SREWT.JWT
 {
     public interface IAuthService
     {
-        Task<string> GenerateJwtTokenAsync(string username, string password);
+        Task<ServiceResult<string>> GenerateJwtTokenAsync(string username, string password);
         Task<Boolean> ValidateTokenAsync(string TokenString);
     }
 }
