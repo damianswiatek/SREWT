@@ -8,7 +8,7 @@ using System.Web.Http.Filters;
 
 namespace SREWT.Attributes
 {
-    public class TokenAuthenticate : System.Attribute, IAuthenticationFilter
+    public class TokenAuthenticate : System.Attribute
     {
 
         public bool AllowMultiple
@@ -53,11 +53,6 @@ namespace SREWT.Attributes
             {
                 context.ErrorResult = new AuthenticationFailureResult("Exception: \n" + ex.Message, context.Request);
             }
-        }
-
-        public Task ChallengeAsync(HttpAuthenticationChallengeContext context, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
         }
     }
 }

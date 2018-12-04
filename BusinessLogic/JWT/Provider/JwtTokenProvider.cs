@@ -1,5 +1,6 @@
 ﻿using Common.Configuration;
 using DataModel.Entities;
+using DataModel.Repository.Interfaces;
 using Microsoft.IdentityModel.Tokens;
 using SREWT.JWT.Provider.Interfaces;
 using System;
@@ -10,16 +11,32 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
+using SREWT.Models;
+using Common.Results;
 
 namespace SREWT.JWT.Provider
 {
     public class JwtTokenProvider : IJwtTokenProvider
     {
+        public string Name
+        {
+            get
+            {
+                return "JwtTokenProvider";
+            }
+        }
+
         private static SigningCredentials _signingCredentials;
         private static SecurityKey _securityKey;
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IMembershipHashProvider _membershipHashProvider;
 
-        public JwtTokenProvider()
+        public JwtTokenProvider(IUnitOfWork unitOfWork, IMembershipHashProvider membershipHashProvider)
         {
+            _unitOfWork = unitOfWork;
+            _membershipHashProvider = membershipHashProvider;
+
+
             string signingKeyPath = HttpRuntime.AppDomainAppPath + "App_Data\\rsakey.dat";
             string signingKey = null;
 
@@ -43,9 +60,10 @@ namespace SREWT.JWT.Provider
             _signingCredentials = new Microsoft.IdentityModel.Tokens.SigningCredentials(_securityKey, SecurityAlgorithms.HmacSha256);
         }
 
-        public Task<string> GenerateToken(User user)
+        public async Task<ServiceResult<string>> GenerateToken(string username, string password)
         {
-            return Task.Run(() =>
+            ServiceResult<string> result = new ServiceResult<string>(null);
+            if (await this.VerifyUserPassword(username, password))
             {
                 byte[] byteArray = Encoding.ASCII.GetBytes(JwtRegisteredClaimNames.UniqueName);
                 MemoryStream stream = new MemoryStream(byteArray);
@@ -53,7 +71,8 @@ namespace SREWT.JWT.Provider
                 // Create the JWT
                 var claimsIdentity = new ClaimsIdentity(new[]
                 {
-                    new System.Security.Claims.Claim(new System.IO.BinaryReader(stream),new ClaimsIdentity(user.Firstname + " " + user.Lastname)),
+                    new Claim(JwtRegisteredClaimNames.UniqueName, username),
+                    //new System.Security.Claims.Claim(new System.IO.BinaryReader(stream),new ClaimsIdentity(username)),
                     // And any other bit of (session) data you want....
                 });
 
@@ -77,8 +96,13 @@ namespace SREWT.JWT.Provider
 
                 Microsoft.IdentityModel.Tokens.SecurityToken token = tokenHandler.CreateToken(tokenDescriptor);
 
-                return tokenHandler.WriteToken(token);
-            });
+                result.Result = tokenHandler.WriteToken(token);
+                return result;
+            }
+            else
+            {
+                return result.AddError(this.Name, "GenerateToken", ServiceMessageType.Warning, "Incorrect password or user does not exist", null);
+            }
         }
 
         public Task<ClaimsPrincipal> ValidateToken(string token)
@@ -118,6 +142,21 @@ namespace SREWT.JWT.Provider
 
                 return result;
             });
+        }
+
+        private async Task<bool> VerifyUserPassword(string username, string password)
+        {
+            IRepository<User> userRepository = this._unitOfWork.Repository<User>();
+            User user = await userRepository.Select(u => u.Username == username);
+
+            if (user != null)
+            {
+                return await _membershipHashProvider.VerifyPassword(password, user.PasswordHash);
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

@@ -15,12 +15,11 @@ namespace SREWT.Controllers
 {
     public class MembershipController : BaseController
     {
-        private readonly IAuthService _authService;
+        private readonly IJwtTokenProvider _jwtTokenProvider;
 
-
-        public MembershipController(IAuthService authService, IIdentityProvider identityProvider, IUsersService userService) : base(identityProvider, userService)
+        public MembershipController(IJwtTokenProvider jwtTokenProvider, IIdentityProvider identityProvider, IUsersService userService) : base(identityProvider, userService)
         {
-            _authService = authService;
+            _jwtTokenProvider = jwtTokenProvider;
         }
 
 
@@ -39,7 +38,7 @@ namespace SREWT.Controllers
             }
             else
             {
-                return Request.CreateResponse(HttpStatusCode.InternalServerError);
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, result);
             }
         }
 
@@ -49,7 +48,7 @@ namespace SREWT.Controllers
         [Route("api/membership/{login}/token/{password}")]
         public async Task<HttpResponseMessage> Authenticate(string login, string password)
         {
-            ServiceResult<string> result = await _authService.GenerateJwtTokenAsync(login, password);
+            ServiceResult<string> result = await _jwtTokenProvider.GenerateToken(login, password);
             if (result.IsSuccess)
             {
                 base.IsSuccess = true;
@@ -58,7 +57,7 @@ namespace SREWT.Controllers
             }
             else
             {
-                return Request.CreateResponse(HttpStatusCode.Unauthorized);
+                return Request.CreateResponse(HttpStatusCode.Unauthorized, result);
             }
         }
     }

@@ -1,4 +1,5 @@
-﻿using DataModel.Entities;
+﻿using Common.Results;
+using DataModel.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,7 @@ namespace SREWT.JWT.Provider.Interfaces
 {
     public interface IJwtTokenProvider
     {
-        Task<string> GenerateToken(User user);
+        Task<ServiceResult<string>> GenerateToken(string username, string password);
         Task<ClaimsPrincipal> ValidateToken(string token);
     }
 }

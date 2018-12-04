@@ -22,13 +22,6 @@ namespace Common.Results
             }
             set { }
         }
-        public List<ServiceMessage> Errors
-        {
-            get
-            {
-                return this.Messages.Where(m => m.Type == ServiceMessageType.Error).ToList();
-            }
-        }
         #endregion
 
         #region Constructors

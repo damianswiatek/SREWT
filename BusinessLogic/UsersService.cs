@@ -41,10 +41,11 @@ namespace BusinessLogic
                 User newUser = new User
                 {
                     Id = Guid.NewGuid(),
-                    PhoneNumber = "983414531",
-                    ReversedPhoneNumber = "983414532",
+                    PhoneNumber = "9834145315",
+                    ReversedPhoneNumber = "983414536",
                     RegistrationDate = DateTime.UtcNow,
                     X_CreatedDate = DateTime.UtcNow,
+                    InternalToken = Guid.NewGuid(),
                     Username = userName,
                     PasswordHash = await this._membershipProvider.HashPassword(password)
                 };
@@ -77,12 +78,11 @@ namespace BusinessLogic
 
                     if (passwordVerified == true)
                     {
-                        result.Result = await this._jwtTokenProvider.GenerateToken(user);
+                        result = await this._jwtTokenProvider.GenerateToken(userName, password);
                     }
                 }
                 else
                 {
-                    result.Result = null;
                     result.AddError("UsersService", "GetToken", ServiceMessageType.Info, "Unathorize - User with UserName: " + userName + " doesn't exists.");
                 }
             }
