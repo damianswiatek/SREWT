@@ -1,4 +1,4 @@
-﻿using BusinessLogic;
+﻿using BusinessLogic.Services;
 using SREWT.Attributes;
 using SREWT.JWT.Provider.Interfaces;
 using System;
@@ -9,8 +9,8 @@ namespace SREWT.Controllers.Base
     [JwtAuthentication]
     public class BaseController : ApiController
     {
-        public IIdentityProvider _identityProvider;
-        public IUsersService _userService;
+        protected IIdentityProvider _identityProvider;
+        protected IUsersService _userService;
 
         public bool IsSuccess { get; set; }
         public Guid? LoggedUserId { get; set; }

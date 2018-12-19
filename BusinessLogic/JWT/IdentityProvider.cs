@@ -1,4 +1,4 @@
-﻿using BusinessLogic;
+﻿using BusinessLogic.Services;
 using Common.Results;
 using SREWT.JWT.Provider.Interfaces;
 using SREWT.Models;
@@ -27,7 +27,7 @@ namespace SREWT.JWT
             try
             {
                 ClaimsIdentity claumsIdentity = identity as ClaimsIdentity;
-                Claim claim = claumsIdentity.Claims.Where(c => c.Type == ClaimTypes.Authentication).SingleOrDefault();
+                Claim claim = claumsIdentity.Claims.SingleOrDefault(c => c.Type == ClaimTypes.Authentication);
                 if (claim != null)
                 {
                     string internalToken = claim.Value;
@@ -38,7 +38,7 @@ namespace SREWT.JWT
             }
             catch (Exception)
             {
-
+                return null;
             }
 
             return loggedUser;

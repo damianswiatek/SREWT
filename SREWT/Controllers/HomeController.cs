@@ -8,6 +8,8 @@ namespace SREWT.Controllers
 {
     public class HomeController : Controller
     {
+        [HttpGet]
+        [Route("api/home/index")]
         public ActionResult Index()
         {
             ViewBag.Title = "Home Page";

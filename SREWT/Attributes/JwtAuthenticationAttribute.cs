@@ -62,11 +62,7 @@ namespace SREWT.Attributes
 
                 Task<ClaimsPrincipal> validateTokenTask = jwtTokenProvider.ValidateToken(token);
                 validateTokenTask.Wait();
-                if (validateTokenTask.Result != null)
-                {
-
-                }
-                else
+                if (validateTokenTask.Result == null)
                 {
                     actionContext.Response = actionContext.Request.CreateErrorResponse(HttpStatusCode.Unauthorized, "Authorization token not valid.");
                 }

@@ -11,7 +11,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BusinessLogic
+namespace BusinessLogic.Services
 {
     public class UsersService : BaseService, IUsersService
     {
@@ -76,7 +76,7 @@ namespace BusinessLogic
                 {
                     bool passwordVerified = await this._membershipProvider.VerifyPassword(password, user.PasswordHash);
 
-                    if (passwordVerified == true)
+                    if (passwordVerified)
                     {
                         result = await this._jwtTokenProvider.GenerateToken(userName, password);
                     }

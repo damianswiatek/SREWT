@@ -10,6 +10,7 @@ using SREWT.Controllers.Base;
 using SREWT.JWT.Provider.Interfaces;
 using System.Net.Http;
 using System.Net;
+using BusinessLogic.Services;
 
 namespace SREWT.Controllers
 {
