@@ -14,14 +14,19 @@ namespace DataModel.Entities
         public string Username { get; set; }
         public string PasswordHash { get; set; }
         public string PhoneNumber { get; set; }
-        public string ReversedPhoneNumber { get; set; }
         public string Firstname { get; set; }
         public string Lastname { get; set; }
-        public string PostalCode { get; set; }
-        public string City { get; set; }
-        public string Street { get; set; }
+        public string Pesel { get; set; }
+        public int VacationDays { get; set; }
         public string Roles { get; set; }
-        public DateTime RegistrationDate { get; set; }
+
+        public Guid? Company_Id { get; set; }
+        [ForeignKey("Company_Id")]
+        public virtual Company Company { get; set; }
+
+        public virtual List<Address> Addresses { get; set; }
+        public virtual List<Conclusion> Conclusions { get; set; }
+
         #region Deducted Properties
         /// <summary>
         /// A proxy for getting and setting Roles property as List of strings directly from and to JSON fromat.
@@ -36,6 +41,8 @@ namespace DataModel.Entities
 
         public User()
         {
+            this.Addresses = new List<Address>();
+            this.Conclusions = new List<Conclusion>();
         }
     }
 
@@ -59,24 +66,17 @@ namespace DataModel.Entities
                 .IsRequired();
             this.Property(t => t.Firstname).HasColumnName("Firstname");
             this.Property(t => t.Lastname).HasColumnName("Lastname");
-            this.Property(t => t.PostalCode).HasColumnName("PostalCode");
-            this.Property(t => t.City).HasColumnName("City");
-            this.Property(t => t.Street).HasColumnName("Street");
+            this.Property(t => t.Pesel).HasColumnName("Pesel");
+            this.Property(t => t.VacationDays).HasColumnName("VacationDays");
             this.Property(t => t.PhoneNumber)
                 .HasColumnName("PhoneNumber")
                 .IsRequired()
-                .HasMaxLength(20)
-                .HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute("IX_UserPhoneNumber") { IsUnique = true }));
-            this.Property(t => t.ReversedPhoneNumber)
-                .HasColumnName("ReversedPhoneNumber")
-                .IsRequired()
-                .HasMaxLength(20)
-                .HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute("IX_UserReversedPhoneNumber") { IsUnique = true }));
-
-            this.Property(t => t.RegistrationDate).HasColumnName("RegistrationDate").IsRequired();
+                .HasMaxLength(20);
             this.Property(t => t.Roles).HasColumnName("Roles");
 
             // Relationships
+            this.HasMany(t => t.Addresses).WithOptional(t => t.User).HasForeignKey(t => t.User_Id).WillCascadeOnDelete(false);
+            this.HasMany(t => t.Conclusions).WithOptional(t => t.User).HasForeignKey(t => t.User_Id).WillCascadeOnDelete(false);
         }
     }
     #endregion

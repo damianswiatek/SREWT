@@ -42,8 +42,6 @@ namespace BusinessLogic.Services
                 {
                     Id = Guid.NewGuid(),
                     PhoneNumber = "9834145315",
-                    ReversedPhoneNumber = "983414536",
-                    RegistrationDate = DateTime.UtcNow,
                     X_CreatedDate = DateTime.UtcNow,
                     InternalToken = Guid.NewGuid(),
                     Username = userName,

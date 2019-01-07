@@ -7,13 +7,13 @@ namespace DataModel.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.2.0-61023")]
-    public sealed partial class AddUserTable : IMigrationMetadata
+    public sealed partial class Add_Tables : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(AddUserTable));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(Add_Tables));
         
         string IMigrationMetadata.Id
         {
-            get { return "201812021014356_AddUserTable"; }
+            get { return "201812281615124_Add_Tables"; }
         }
         
         string IMigrationMetadata.Source

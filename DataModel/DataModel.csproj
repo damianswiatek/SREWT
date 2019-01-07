@@ -134,11 +134,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Container\DatabaseContainer.cs" />
+    <Compile Include="Entities\Address.cs" />
     <Compile Include="Entities\Base\EntityBase.cs" />
+    <Compile Include="Entities\Company.cs" />
+    <Compile Include="Entities\Conclusion.cs" />
     <Compile Include="Entities\User.cs" />
-    <Compile Include="Migrations\201812021014356_AddUserTable.cs" />
-    <Compile Include="Migrations\201812021014356_AddUserTable.Designer.cs">
-      <DependentUpon>201812021014356_AddUserTable.cs</DependentUpon>
+    <Compile Include="Migrations\201812281615124_Add_Tables.cs" />
+    <Compile Include="Migrations\201812281615124_Add_Tables.Designer.cs">
+      <DependentUpon>201812281615124_Add_Tables.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\LoggedUser.cs" />
@@ -163,8 +166,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201812021014356_AddUserTable.resx">
-      <DependentUpon>201812021014356_AddUserTable.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201812281615124_Add_Tables.resx">
+      <DependentUpon>201812281615124_Add_Tables.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
