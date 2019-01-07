@@ -1,4 +1,5 @@
 ﻿using DataModel.Entities.Base;
+using DataModel.Repository.StoredProcedures;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Data.Entity.ModelConfiguration;
 
 namespace DataModel.Entities
 {
-    public class User : EntityBase
+    public class User : EntityBase, IMappableDTO
     {
         public Guid InternalToken { get; set; }
         public string Username { get; set; }

@@ -154,6 +154,8 @@
     <Compile Include="JWT\Provider\MembershipHashProvider.cs" />
     <Compile Include="JWT\RSAKeyProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\StoredProcedures\IUserServiceSQL.cs" />
+    <Compile Include="Services\StoredProcedures\UserServiceSQL.cs" />
     <Compile Include="Services\UsersService.cs" />
   </ItemGroup>
   <ItemGroup>
