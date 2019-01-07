@@ -4,6 +4,7 @@ using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 using DataModel.Repository.Interfaces;
+using DataModel.Repository.StoredProcedures;
 
 namespace DataModel.Repository
 {
@@ -20,6 +21,11 @@ namespace DataModel.Repository
         #endregion
 
         #region Constructors
+        public UnitOfWork()
+        {
+            repositoryDictionary = new Dictionary<Type, object>();
+        }
+
         public UnitOfWork(DbContext context)
         {
             _context = context;
@@ -82,5 +88,10 @@ namespace DataModel.Repository
             GC.SuppressFinalize(this);
         }
         #endregion
+
+        public IProcedure Procedure<T>(string name) where T : class, IProcedure
+        {
+            return Activator.CreateInstance(typeof(T), name) as IProcedure;
+        }
     }
 }

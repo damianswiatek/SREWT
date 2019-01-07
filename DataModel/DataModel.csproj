@@ -63,6 +63,7 @@
     <Reference Include="System.ComponentModel.TypeConverter, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.ComponentModel.TypeConverter.4.1.0\lib\net45\System.ComponentModel.TypeConverter.dll</HintPath>
     </Reference>
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Console, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Console.4.0.0\lib\net46\System.Console.dll</HintPath>
     </Reference>
@@ -148,6 +149,19 @@
     <Compile Include="Repository\Interfaces\IBaseRepository.cs" />
     <Compile Include="Repository\Interfaces\IRepository.cs" />
     <Compile Include="Repository\Interfaces\IUnitOfWork.cs" />
+    <Compile Include="Repository\StoredProcedures\BaseOneWayMapper.cs" />
+    <Compile Include="Repository\StoredProcedures\BaseTwoWayMapper.cs" />
+    <Compile Include="Repository\StoredProcedures\IMappableDTO.cs" />
+    <Compile Include="Repository\StoredProcedures\IProcedure.cs" />
+    <Compile Include="Repository\StoredProcedures\KVPExtension.cs" />
+    <Compile Include="Repository\StoredProcedures\MapperFactory.cs" />
+    <Compile Include="Repository\StoredProcedures\Mappers\UserMap.cs" />
+    <Compile Include="Repository\StoredProcedures\MICProcedure.cs" />
+    <Compile Include="Repository\StoredProcedures\ProcedureBase.cs" />
+    <Compile Include="Repository\StoredProcedures\ProcedureParamObject.cs" />
+    <Compile Include="Repository\StoredProcedures\ProcedureResult.cs" />
+    <Content Include="Repository\StoredProcedures\Procedures\Procedurdes.sql" />
+    <Compile Include="Repository\StoredProcedures\SqlProcedure.cs" />
     <Compile Include="Repository\UnitOfWork.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -167,5 +181,6 @@
       <DependentUpon>201812021014356_AddUserTable.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

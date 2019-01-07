@@ -2,6 +2,7 @@
 using System.Web.Http.Dispatcher;
 using BusinessLogic;
 using BusinessLogic.Services;
+using BusinessLogic.Services.StoredProcedures;
 using DataModel.Container;
 using DataModel.Entities;
 using DataModel.Repository;
@@ -72,6 +73,7 @@ namespace SREWT
 
             // Services
             container.RegisterType<IUsersService, UsersService>(new PerRequestLifetimeManager());
+            container.RegisterType<IUserServiceSQL, UserServiceSQL>(new PerRequestLifetimeManager());
         }
     }
 }
