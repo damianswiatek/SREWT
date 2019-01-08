@@ -25,7 +25,11 @@ namespace DataModel.Entities
         [ForeignKey("Company_Id")]
         public virtual Company Company { get; set; }
 
-        public virtual List<Address> Addresses { get; set; }
+        public Guid? Address_Id { get; set; }
+        [ForeignKey("Address_Id")]
+        public virtual Address Address { get; set; }
+
+        //public virtual List<Address> Addresses { get; set; }
         public virtual List<Conclusion> Conclusions { get; set; }
 
         #region Deducted Properties
@@ -42,7 +46,7 @@ namespace DataModel.Entities
 
         public User()
         {
-            this.Addresses = new List<Address>();
+            //this.Addresses = new List<Address>();
             this.Conclusions = new List<Conclusion>();
         }
     }
@@ -76,7 +80,6 @@ namespace DataModel.Entities
             this.Property(t => t.Roles).HasColumnName("Roles");
 
             // Relationships
-            this.HasMany(t => t.Addresses).WithOptional(t => t.User).HasForeignKey(t => t.User_Id).WillCascadeOnDelete(false);
             this.HasMany(t => t.Conclusions).WithOptional(t => t.User).HasForeignKey(t => t.User_Id).WillCascadeOnDelete(false);
         }
     }

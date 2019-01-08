@@ -22,6 +22,7 @@ namespace DataModel.Migrations
                         VacationDays = c.Int(nullable: false),
                         Roles = c.String(),
                         Company_Id = c.Guid(),
+                        Address_Id = c.Guid(),
                         X_CreatedDate = c.DateTime(),
                         X_LastUpdateDate = c.DateTime(),
                         X_ArchivedDate = c.DateTime(),
@@ -29,8 +30,10 @@ namespace DataModel.Migrations
                     })
                 .PrimaryKey(t => t.Id)
                 .ForeignKey("dbo.Companies", t => t.Company_Id)
+                .ForeignKey("dbo.Addresses", t => t.Address_Id)
                 .Index(t => t.InternalToken, unique: true, name: "IX_UserInternalToken")
-                .Index(t => t.Company_Id);
+                .Index(t => t.Company_Id)
+                .Index(t => t.Address_Id);
             
             CreateTable(
                 "dbo.Addresses",
@@ -41,18 +44,12 @@ namespace DataModel.Migrations
                         City = c.String(),
                         Street = c.String(),
                         Polity = c.String(),
-                        User_Id = c.Guid(),
-                        Company_Id = c.Guid(),
                         X_CreatedDate = c.DateTime(),
                         X_LastUpdateDate = c.DateTime(),
                         X_ArchivedDate = c.DateTime(),
                         X_Archived = c.Boolean(),
                     })
-                .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.Companies", t => t.Company_Id)
-                .ForeignKey("dbo.Users", t => t.User_Id)
-                .Index(t => t.User_Id)
-                .Index(t => t.Company_Id);
+                .PrimaryKey(t => t.Id);
             
             CreateTable(
                 "dbo.Companies",
@@ -63,12 +60,15 @@ namespace DataModel.Migrations
                         FullName = c.String(),
                         TaxpayerIdentyficationNumber = c.String(),
                         Regon = c.String(),
+                        Address_Id = c.Guid(),
                         X_CreatedDate = c.DateTime(),
                         X_LastUpdateDate = c.DateTime(),
                         X_ArchivedDate = c.DateTime(),
                         X_Archived = c.Boolean(),
                     })
-                .PrimaryKey(t => t.Id);
+                .PrimaryKey(t => t.Id)
+                .ForeignKey("dbo.Addresses", t => t.Address_Id)
+                .Index(t => t.Address_Id);
             
             CreateTable(
                 "dbo.Conclusions",
@@ -95,12 +95,12 @@ namespace DataModel.Migrations
         public override void Down()
         {
             DropForeignKey("dbo.Conclusions", "User_Id", "dbo.Users");
-            DropForeignKey("dbo.Addresses", "User_Id", "dbo.Users");
+            DropForeignKey("dbo.Users", "Address_Id", "dbo.Addresses");
             DropForeignKey("dbo.Users", "Company_Id", "dbo.Companies");
-            DropForeignKey("dbo.Addresses", "Company_Id", "dbo.Companies");
+            DropForeignKey("dbo.Companies", "Address_Id", "dbo.Addresses");
             DropIndex("dbo.Conclusions", new[] { "User_Id" });
-            DropIndex("dbo.Addresses", new[] { "Company_Id" });
-            DropIndex("dbo.Addresses", new[] { "User_Id" });
+            DropIndex("dbo.Companies", new[] { "Address_Id" });
+            DropIndex("dbo.Users", new[] { "Address_Id" });
             DropIndex("dbo.Users", new[] { "Company_Id" });
             DropIndex("dbo.Users", "IX_UserInternalToken");
             DropTable("dbo.Conclusions");

@@ -15,8 +15,11 @@ namespace DataModel.Entities
         public string Street { get; set; }
         public string Polity { get; set; }
 
-        public Guid? User_Id { get; set; }
-        public virtual User User { get; set; }
+        //public Guid? User_Id { get; set; }
+        //public virtual User User { get; set; }
+
+        public virtual List<Company> Companies { get; set; }
+        public virtual List<User> Users { get; set; }
     }
 
     public class AddressMap : EntityMapBase<Address>
@@ -33,7 +36,8 @@ namespace DataModel.Entities
             this.Property(t => t.Polity).HasColumnName("Polity");
 
             // Relationships
-            //this.HasMany(t => t.Addresses).WithOptional(t => t.Company).HasForeignKey(t => t.Company_Id).WillCascadeOnDelete(false);
+            this.HasMany(t => t.Companies).WithOptional(t => t.Address).HasForeignKey(t => t.Address_Id).WillCascadeOnDelete(false);
+            this.HasMany(t => t.Users).WithOptional(t => t.Address).HasForeignKey(t => t.Address_Id).WillCascadeOnDelete(false);
         }
     }
 }

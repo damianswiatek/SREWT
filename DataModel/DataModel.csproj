@@ -140,9 +140,9 @@
     <Compile Include="Entities\Company.cs" />
     <Compile Include="Entities\Conclusion.cs" />
     <Compile Include="Entities\User.cs" />
-    <Compile Include="Migrations\201812281615124_Add_Tables.cs" />
-    <Compile Include="Migrations\201812281615124_Add_Tables.Designer.cs">
-      <DependentUpon>201812281615124_Add_Tables.cs</DependentUpon>
+    <Compile Include="Migrations\201901081040446_Add_Tables.cs" />
+    <Compile Include="Migrations\201901081040446_Add_Tables.Designer.cs">
+      <DependentUpon>201901081040446_Add_Tables.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\LoggedUser.cs" />
@@ -180,10 +180,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201812281615124_Add_Tables.resx">
-      <DependentUpon>201812281615124_Add_Tables.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201901081040446_Add_Tables.resx">
+      <DependentUpon>201901081040446_Add_Tables.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

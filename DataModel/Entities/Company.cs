@@ -1,6 +1,7 @@
 ﻿using DataModel.Entities.Base;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,10 +16,9 @@ namespace DataModel.Entities
         public string Regon { get; set; }
 
         public Guid? Address_Id { get; set; }
-        //[ForeignKey("Address_Id")]
-        public virtual Address Addresses{ get; set; }
+        [ForeignKey("Address_Id")]
+        public virtual Address Address{ get; set; }
 
-        //public virtual List<Address> Addresses { get; set; }
         public virtual List<User> Users { get; set; }
 
         public Company()
