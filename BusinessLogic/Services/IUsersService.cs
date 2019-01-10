@@ -10,7 +10,7 @@ namespace BusinessLogic.Services
 {
     public interface IUsersService
     {
-        Task<ServiceResult<bool>> CreateUser(string userName, string password);
+        Task<ServiceResult<bool>> CreateUser(UserData userData);
         Task<ServiceResult<string>> GetToken(string userName, string password);
         Task<ServiceResult<LoggedUser>> GetLoggedUser(Guid loggedUserId);
     }

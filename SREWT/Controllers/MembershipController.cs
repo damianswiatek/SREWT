@@ -50,9 +50,9 @@ namespace SREWT.Controllers
         [ResponseType(typeof(ServiceResult<bool>))]
         [HttpPost]
         [Route("api/membership/create")]
-        public async Task<HttpResponseMessage> CreateUser([FromBody] Login login)
+        public async Task<HttpResponseMessage> CreateUser([FromBody] UserData user)
         {
-            ServiceResult<bool> result = await _userService.CreateUser(login.UserName, login.Password);
+            ServiceResult<bool> result = await _userService.CreateUser(user);
             if (result.IsSuccess)
             {
                 base.IsSuccess = true;

@@ -69,7 +69,7 @@ namespace SREWT
             // Repositories
             container.RegisterType<IBaseRepository<User>, BaseRepository<User>>(new PerRequestLifetimeManager());
             container.RegisterType<IRepository<User>, GenericRepository<User>>(new PerRequestLifetimeManager());
-            container.RegisterType<IRepository<User>, GenericRepository<User>>(new PerRequestLifetimeManager());
+            container.RegisterType<IRepository<Address>, GenericRepository<Address>>(new PerRequestLifetimeManager());
 
             // Services
             container.RegisterType<IUsersService, UsersService>(new PerRequestLifetimeManager());

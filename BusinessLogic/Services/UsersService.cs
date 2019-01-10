@@ -17,37 +17,52 @@ namespace BusinessLogic.Services
     {
         #region Fields
         private readonly IRepository<User> _usersRepository;
+        private readonly IRepository<Address> _addressRepository;
         private readonly IMembershipHashProvider _membershipProvider;
         private readonly IJwtTokenProvider _jwtTokenProvider;
         #endregion
 
         #region Constructors
-        public UsersService(IUnitOfWork unitOfWork, IRepository<User> usersRepository, IMembershipHashProvider membershipProvider, IJwtTokenProvider jwtTokenProvider)
+        public UsersService(IUnitOfWork unitOfWork, IRepository<User> usersRepository, IRepository<Address> addressRepository, IMembershipHashProvider membershipProvider, IJwtTokenProvider jwtTokenProvider)
             : base(unitOfWork)
         {
             this._usersRepository = usersRepository;
+            this._addressRepository = addressRepository;
             this._membershipProvider = membershipProvider;
             this._jwtTokenProvider = jwtTokenProvider;
         }
         #endregion
 
         #region Methods
-        public async Task<ServiceResult<bool>> CreateUser(string userName, string password)
+        public async Task<ServiceResult<bool>> CreateUser(UserData userData)
         {
             ServiceResult<bool> result = new ServiceResult<bool>(false);
 
             try
             {
+                Address address = new Address()
+                {
+                    Id = Guid.NewGuid(),
+                    City = userData.City,
+                    PostalCode = userData.PostalCode,
+                    Polity = userData.Polity,
+                    Street = userData.Street,
+                    X_CreatedDate = DateTime.UtcNow,
+                    X_LastUpdateDate = DateTime.UtcNow                
+                };
+
                 User newUser = new User
                 {
                     Id = Guid.NewGuid(),
-                    PhoneNumber = "9834145315",
+                    Address_Id = address.Id,
+                    PhoneNumber = userData.PhoneNumber,
                     X_CreatedDate = DateTime.UtcNow,
+                    X_LastUpdateDate = DateTime.UtcNow,
                     InternalToken = Guid.NewGuid(),
-                    Username = userName,
-                    PasswordHash = await this._membershipProvider.HashPassword(password)
+                    Username = userData.Username,
+                    PasswordHash = await this._membershipProvider.HashPassword(userData.Password)
                 };
-
+                this._addressRepository.Add(address);
                 this._usersRepository.Add(newUser);
 
                 this._unitOfWork.Save();
