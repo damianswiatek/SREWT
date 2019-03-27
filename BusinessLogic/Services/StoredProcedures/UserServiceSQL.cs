@@ -1,4 +1,5 @@
 ﻿using Common.Results;
+using DataModel.Container;
 using DataModel.Entities;
 using DataModel.Repository;
 using DataModel.Repository.Interfaces;
@@ -17,7 +18,7 @@ namespace BusinessLogic.Services.StoredProcedures
         /// <summary>
         /// Default controller
         /// </summary>
-        public UserServiceSQL(IUnitOfWork unitOfWork) : base(unitOfWork)
+        public UserServiceSQL(IUnitOfWork unitOfWork, DatabaseContainer context) : base(unitOfWork, context)
         { }
         #endregion
 
@@ -28,7 +29,7 @@ namespace BusinessLogic.Services.StoredProcedures
                 User user = new User();
 
                 var dataMapper = MapperFactory.GetOneWayMap<Dictionary<string, object>, User>();
-                var result = _unitOfWork.Procedure<MICProcedure>("dbo.test")
+                var result = _unitOfWork.Procedure<MICProcedure>("dbo.spGetUser")
                                     .Initialize(
                                         "@Id".PairWith(userId)
                                         )
@@ -42,6 +43,30 @@ namespace BusinessLogic.Services.StoredProcedures
                 }
 
                 return new ServiceResult<User>(user);
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        public ServiceResult<bool> DeleteUser(Guid userId, Guid? groupLogKey = null)
+        {
+            try
+            {
+                ServiceResult<bool> result = new ServiceResult<bool>(false);
+
+                var dataMapper = MapperFactory.GetOneWayMap<Dictionary<string, object>, User>();
+                var resultData = _unitOfWork.Procedure<MICProcedure>("dbo.spDeleteUser")
+                                    .Initialize(
+                                        "@Id".PairWith(userId)
+                                        )
+                                     .Execute()
+                                     .DataRows;
+
+                result.Result = true;
+
+                return result;
             }
             catch (Exception ex)
             {

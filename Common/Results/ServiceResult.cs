@@ -11,6 +11,7 @@ namespace Common.Results
         #region Properties
         public T Result { get; set; }
         public List<ServiceMessage> Messages { get; }
+        public long DurationOfQuery { get; set; }
         #endregion
 
         #region Deducted Properties

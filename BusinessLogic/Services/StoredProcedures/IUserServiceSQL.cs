@@ -11,5 +11,6 @@ namespace BusinessLogic.Services.StoredProcedures
     public interface IUserServiceSQL
     {
         ServiceResult<User> GetUser(Guid userId, Guid? groupLogKey = null);
+        ServiceResult<bool> DeleteUser(Guid userId, Guid? groupLogKey = null);
     }
 }
