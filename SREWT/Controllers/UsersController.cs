@@ -1,12 +1,17 @@
 ﻿using BusinessLogic.Services;
 using BusinessLogic.Services.StoredProcedures;
 using Common.Results;
+using Dapper;
+using DataModel.Entities;
 using DataModel.Models;
 using SREWT.Controllers.Base;
 using SREWT.JWT.Provider.Interfaces;
 using SREWT.Models;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.Data;
+using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
@@ -21,7 +26,7 @@ namespace SREWT.Controllers
     {
         private readonly IJwtTokenProvider _jwtTokenProvider;
         private readonly IUserServiceSQL _userServiceSQL;
-        
+
 
         public UsersController(IJwtTokenProvider jwtTokenProvider, IIdentityProvider identityProvider, IUsersService userService, IUserServiceSQL userServiceSQL) : base(identityProvider, userService)
         {
@@ -38,7 +43,7 @@ namespace SREWT.Controllers
             var watch = Stopwatch.StartNew();
             ServiceResult<List<UserDetail>> result = await _userService.GetUsersCompain(compainId);
             watch.Stop();
-            result.DurationOfQuery = watch.Elapsed.Ticks/1000;
+            result.DurationOfQuery = watch.Elapsed.Ticks / 1000;
             if (result.IsSuccess)
             {
                 return Request.CreateResponse(HttpStatusCode.OK, result);
@@ -98,6 +103,27 @@ namespace SREWT.Controllers
         {
             var watch = Stopwatch.StartNew();
             ServiceResult<bool> result = await _userService.CreateUser(user);
+            watch.Stop();
+            result.DurationOfQuery = watch.Elapsed.Ticks / 1000;
+            if (result.IsSuccess)
+            {
+                return Request.CreateResponse(HttpStatusCode.OK, result);
+            }
+            else
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, result);
+            }
+        }
+
+        //SQL
+        [AllowAnonymous]
+        [ResponseType(typeof(ServiceResult<bool>))]
+        [HttpPost]
+        [Route("api/users/createSQL")]
+        public async Task<HttpResponseMessage> CreateUserSQL([FromBody] UserDetail user)
+        {
+            var watch = Stopwatch.StartNew();
+            ServiceResult<User> result = await _userServiceSQL.CreateUser(user);
             watch.Stop();
             result.DurationOfQuery = watch.Elapsed.Ticks / 1000;
             if (result.IsSuccess)
@@ -185,6 +211,32 @@ namespace SREWT.Controllers
             if (result.IsSuccess)
             {
                 return Request.CreateResponse(HttpStatusCode.OK, result);
+            }
+            else
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, result);
+            }
+        }
+
+        [AllowAnonymous]
+        [ResponseType(typeof(ServiceResult<bool>))]
+        [HttpGet]
+        [Route("api/users/getAll")]
+        public async Task<HttpResponseMessage> GetAll()
+        {
+            ServiceResult<List<User>> result = new ServiceResult<List<User>>(null);
+            var watch = Stopwatch.StartNew();
+            List<User> users = null;
+            using (IDbConnection db = new SqlConnection(ConfigurationManager.ConnectionStrings["myDB"].ConnectionString))
+            {
+                  users = db.Query<User>("Select * From Users").ToList();
+            }
+
+            watch.Stop();
+            result.DurationOfQuery = watch.Elapsed.Ticks / 1000;
+            if (result.IsSuccess)
+            {
+                return Request.CreateResponse(HttpStatusCode.OK, new ServiceResult<List<User>>(users));
             }
             else
             {

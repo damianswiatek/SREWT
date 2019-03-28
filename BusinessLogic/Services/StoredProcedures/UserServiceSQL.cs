@@ -28,6 +28,45 @@ namespace BusinessLogic.Services.StoredProcedures
         }
         #endregion
 
+        public async Task<ServiceResult<User>> CreateUser(UserDetail user, Guid? groupLogKey = null)
+        {
+            ServiceResult<User> serviceResult = new ServiceResult<User>(null);
+            try
+            {
+                User resultData = new User();
+                string passwordHash = await this._membershipProvider.HashPassword("password");
+
+                var dataMapper = MapperFactory.GetOneWayMap<Dictionary<string, object>, User>();
+                var result = _unitOfWork.Procedure<MICProcedure>("dbo.spCreateUser")
+                                    .Initialize(
+                                          "@Username".PairWith(user.Username)
+                                        , "@PasswordHash".PairWith(passwordHash)
+                                        , "@PhoneNumber".PairWith(user.PhoneNumber)
+                                        , "@Firstname".PairWith(user.Firstname)
+                                        , "@Lastname".PairWith(user.Lastname)
+                                        , "@Pesel".PairWith(user.Pesel)
+                                        , "@VacationDays".PairWith(user.VacationDays)
+                                        , "@X_CreatedDate".PairWith(DateTime.Now)
+                                        , "@X_LastUpdateDate".PairWith(DateTime.Now)
+                                        )
+                                     .Execute()
+                                     .DataRows;
+
+
+                if (result != null && result.Count > 0)
+                {
+                    dataMapper.Map(result.First(), resultData);
+                }
+
+                serviceResult.Result = resultData;
+                return serviceResult;
+            }
+            catch (Exception ex)
+            {
+                return serviceResult.AddError(this.Name, "CreateUser", ServiceMessageType.Error, "Exception", ex);
+            }
+        }
+
         public async Task<ServiceResult<UserDetail>> CreateUserWithAddress(UserDetail user, Guid? groupLogKey = null)
         {
             ServiceResult<UserDetail> serviceResult = new ServiceResult<UserDetail>(null);
@@ -67,7 +106,7 @@ namespace BusinessLogic.Services.StoredProcedures
             }
             catch (Exception ex)
             {
-                return serviceResult.AddError(this.Name, "CreateUserWithAddress", ServiceMessageType.Error, "Wrong access", ex);
+                return serviceResult.AddError(this.Name, "CreateUserWithAddress", ServiceMessageType.Error, "Exception", ex);
             }
         }
 

@@ -85,3 +85,33 @@ BEGIN
 END
 GO
 
+IF EXISTS (SELECT * FROM sys.objects where object_id = OBJECT_ID(N'spCreateUser') AND type IN (N'P', N'PC'))
+DROP PROCEDURE [dbo].[spCreateUser];
+GO
+
+CREATE PROCEDURE [dbo].[spCreateUser]
+	 @Username	nvarchar(MAX)	
+	,@PasswordHash	nvarchar(MAX)	
+	,@PhoneNumber	nvarchar(20)	
+	,@Firstname	nvarchar(MAX)	
+	,@Lastname	nvarchar(MAX)	
+	,@Pesel	nvarchar(MAX)	
+	,@VacationDays	int	
+	,@Roles	nvarchar(MAX) = null	
+	,@Company_Id	uniqueidentifier = null	
+	,@X_CreatedDate	datetime	
+	,@X_LastUpdateDate	datetime	
+AS
+BEGIN
+	DECLARE @identity uniqueidentifier
+	SET @identity = NEWID()
+	DECLARE @identityInternalToken uniqueidentifier
+	SET @identityInternalToken = NEWID()
+
+	INSERT INTO [dbo].[Users] ([Id], [InternalToken], [Username], [PasswordHash], [PhoneNumber], [Firstname], [Lastname], [Pesel], [VacationDays], [Roles], [Company_Id], [X_CreatedDate], [X_LastUpdateDate], [X_ArchivedDate], [X_Archived])
+     VALUES (@identity, @identityInternalToken, @Username, @PasswordHash, @PhoneNumber, @Firstname, @Lastname, @Pesel, @VacationDays, @Roles, @Company_Id, @X_CreatedDate, @X_LastUpdateDate, null, 0)
+
+	 SELECT * FROM dbo.Users WHERE Id = @identity
+END
+GO
+
