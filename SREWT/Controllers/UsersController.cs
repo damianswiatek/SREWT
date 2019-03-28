@@ -110,6 +110,27 @@ namespace SREWT.Controllers
             }
         }
 
+        //SQL
+        [AllowAnonymous]
+        [ResponseType(typeof(ServiceResult<bool>))]
+        [HttpPost]
+        [Route("api/users/CreateUserWithAddressSQL")]
+        public async Task<HttpResponseMessage> CreateUserWithAddress([FromBody] UserDetail user)
+        {
+            var watch = Stopwatch.StartNew();
+            ServiceResult<UserDetail> result = await _userServiceSQL.CreateUserWithAddress(user);
+            watch.Stop();
+            result.DurationOfQuery = watch.Elapsed.Ticks / 1000;
+            if (result.IsSuccess)
+            {
+                return Request.CreateResponse(HttpStatusCode.OK, result);
+            }
+            else
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, result);
+            }
+        }
+
         [AllowAnonymous]
         [ResponseType(typeof(ServiceResult<bool>))]
         [HttpPut]

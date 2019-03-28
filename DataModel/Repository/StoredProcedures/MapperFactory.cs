@@ -13,6 +13,7 @@ namespace DataModel.Repository.StoredProcedures
         private static readonly List<Type> _mapTypes = new List<Type>
         {
             typeof(UserMap)
+            ,typeof(UserDetailMap)
         };
 
         public static BaseTwoWayMapper<TFrom, TTo> GetTwoWayMap<TFrom, TTo>()

@@ -1,9 +1,12 @@
 ﻿using Common.Results;
 using DataModel.Container;
 using DataModel.Entities;
+using DataModel.Models;
 using DataModel.Repository;
 using DataModel.Repository.Interfaces;
 using DataModel.Repository.StoredProcedures;
+using SREWT.JWT;
+using SREWT.JWT.Provider.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,13 +17,59 @@ namespace BusinessLogic.Services.StoredProcedures
 {
     public class UserServiceSQL : BaseService, IUserServiceSQL
     {
+        protected readonly IMembershipHashProvider _membershipProvider;
         #region Constructors
         /// <summary>
         /// Default controller
         /// </summary>
-        public UserServiceSQL(IUnitOfWork unitOfWork, DatabaseContainer context) : base(unitOfWork, context)
-        { }
+        public UserServiceSQL(IUnitOfWork unitOfWork, IMembershipHashProvider membershipProvider, DatabaseContainer context) : base(unitOfWork, context)
+        {
+            _membershipProvider = membershipProvider;
+        }
         #endregion
+
+        public async Task<ServiceResult<UserDetail>> CreateUserWithAddress(UserDetail user, Guid? groupLogKey = null)
+        {
+            ServiceResult<UserDetail> serviceResult = new ServiceResult<UserDetail>(null);
+            try
+            {
+                UserDetail resultData = new UserDetail();
+                string passwordHash = await this._membershipProvider.HashPassword("password");
+
+                var dataMapper = MapperFactory.GetOneWayMap<Dictionary<string, object>, UserDetail>();
+                var result = _unitOfWork.Procedure<MICProcedure>("dbo.spCreateUserWithAddress")
+                                    .Initialize(
+                                          "@Username".PairWith(user.Username)
+                                        , "@PasswordHash".PairWith(passwordHash)
+                                        , "@PhoneNumber".PairWith(user.PhoneNumber)
+                                        , "@Firstname".PairWith(user.Firstname)
+                                        , "@Lastname".PairWith(user.Lastname)
+                                        , "@Pesel".PairWith(user.Pesel)
+                                        , "@VacationDays".PairWith(user.VacationDays)
+                                        , "@PostalCode".PairWith(user.PostalCode)
+                                        , "@City".PairWith(user.City)
+                                        , "@Street".PairWith(user.Street)
+                                        , "@Polity".PairWith(user.Polity)
+                                        , "@X_CreatedDate".PairWith(DateTime.Now)
+                                        , "@X_LastUpdateDate".PairWith(DateTime.Now)
+                                        )
+                                     .Execute()
+                                     .DataRows;
+
+
+                if (result != null && result.Count > 0)
+                {
+                    dataMapper.Map(result.First(), resultData);
+                }
+
+                serviceResult.Result = resultData;
+                return serviceResult;
+            }
+            catch (Exception ex)
+            {
+                return serviceResult.AddError(this.Name, "CreateUserWithAddress", ServiceMessageType.Error, "Wrong access", ex);
+            }
+        }
 
         public ServiceResult<User> GetUser(Guid userId, Guid? groupLogKey = null)
         {

@@ -160,6 +160,7 @@
     <Compile Include="Repository\StoredProcedures\IProcedure.cs" />
     <Compile Include="Repository\StoredProcedures\KVPExtension.cs" />
     <Compile Include="Repository\StoredProcedures\MapperFactory.cs" />
+    <Compile Include="Repository\StoredProcedures\Mappers\UserDetailMap.cs" />
     <Compile Include="Repository\StoredProcedures\Mappers\UserMap.cs" />
     <Compile Include="Repository\StoredProcedures\MICProcedure.cs" />
     <Compile Include="Repository\StoredProcedures\ProcedureBase.cs" />

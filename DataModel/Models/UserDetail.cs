@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DataModel.Repository.StoredProcedures;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DataModel.Models
 {
-    public class UserDetail
+    public class UserDetail : IMappableDTO
     {
         public Guid Id { get; set; }
         public string Username { get; set; }
@@ -21,6 +22,9 @@ namespace DataModel.Models
         public string Street { get; set; }
         public string Polity { get; set; }
 
-        public UserDetail() { }
+        public UserDetail()
+        {
+            this.Id = Guid.Empty;
+        }
     }
 }
