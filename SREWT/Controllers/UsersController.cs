@@ -229,7 +229,7 @@ namespace SREWT.Controllers
             List<User> users = null;
             using (IDbConnection db = new SqlConnection(ConfigurationManager.ConnectionStrings["myDB"].ConnectionString))
             {
-                  users = db.Query<User>("Select * From Users").ToList();
+                users = db.Query<User>("Select * From Users").ToList();
             }
 
             watch.Stop();
@@ -244,5 +244,52 @@ namespace SREWT.Controllers
             }
         }
 
+        [AllowAnonymous]
+        [ResponseType(typeof(ServiceResult<List<UserDetail>>))]
+        [HttpGet]
+        [Route("api/users/getAllUsersDetail")]
+        public async Task<HttpResponseMessage> GetAllUsersDetailAll()
+        {
+            string sql = "select * from Users u inner join Addresses a on a.Id = u.Address_Id";
+            ServiceResult<List<UserDetail>> result = new ServiceResult<List<UserDetail>>(null);
+            var watch = Stopwatch.StartNew();
+            List<UserDetail> users = null;
+            using (IDbConnection db = new SqlConnection(ConfigurationManager.ConnectionStrings["myDB"].ConnectionString))
+            {
+                users = db.Query<User, Address, UserDetail>(
+                            sql,
+                            (user, address) =>
+                            {
+                                user.Address_Id = address.Id;
+                                return new UserDetail() {
+                                    Id = user.Id,
+                                    Firstname = user.Firstname,
+                                    Lastname = user.Lastname,
+                                    PhoneNumber = user.PhoneNumber,
+                                    Pesel = user.Pesel,
+                                    Username = user.Username,
+                                    VacationDays = user.VacationDays,
+                                    City = address.City,
+                                    Polity = address.Polity,
+                                    PostalCode = address.PostalCode,
+                                    Street = address.Street
+                                };
+                            },
+                            splitOn: "Address_Id")
+                            .Distinct()
+                            .ToList();
+                            }
+
+            watch.Stop();
+            result.DurationOfQuery = watch.Elapsed.Ticks / 1000;
+            if (result.IsSuccess)
+            {
+                return Request.CreateResponse(HttpStatusCode.OK, new ServiceResult<List<UserDetail>>(users));
+            }
+            else
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, result);
+            }
+        }
     }
 }
